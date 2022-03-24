@@ -1,5 +1,6 @@
 package com.siqueira76.demo;
 
+import com.siqueira76.demo.models.Order;
 import com.siqueira76.demo.models.Product;
 import com.siqueira76.demo.repos.CustomerRepo;
 import com.siqueira76.demo.repos.OrderRepo;
@@ -40,6 +41,22 @@ class StreamApiExemplesApplicationTests {
 
 		log.info(String.format("exercise 1 - execution time: %1$d ms", (endTime - startTime)));
 		result.forEach(p -> log.info(p.toString()));
+	}
+
+	@Test
+	@DisplayName("Obtain a list of order products belong to category = \"Baby\" ")
+	public void exercise2() {
+		long startTime = System.currentTimeMillis();
+		List<Order> result = orderRepo.findAll();
+		List<Order> resultFinal = result
+				.stream()
+				.filter(o -> o.getProducts().stream().anyMatch(p -> p.getCategory().equalsIgnoreCase("baby")))
+				.collect(Collectors.toList());
+
+		long endTime = System.currentTimeMillis();
+
+		log.info(String.format("exercise 2 - execution time: %1$d ms", (endTime - startTime)));
+		resultFinal.forEach(p -> log.info(p.toString()));
 	}
 
 }
